@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A bedside table clock, calendar, and photo-album.",
   "main": "index.js",
-  "author": "Kevin McGowan",
+  "author": {
+    "name": "Kevin McGowan",
+    "email": "kevin@kevin-mcgowan.com"
+  },
   "license": "MIT"
 }
