@@ -1,0 +1,8 @@
+{
+  "name": "pi-clock",
+  "version": "1.0.0",
+  "description": "A bedside table clock, calendar, and photo-album.",
+  "main": "index.js",
+  "author": "Kevin McGowan",
+  "license": "MIT"
+}
