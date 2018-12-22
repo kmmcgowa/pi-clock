@@ -61,3 +61,9 @@ electon refresh the browser every hour
 server would return vue
 vue on loaded calls server api for the alerts
 server would do all time checks for holidays or dark mode bASED ON TIME
+
+
+
+
+
+$(npm bin)/holidays2json --pick US,GB --min

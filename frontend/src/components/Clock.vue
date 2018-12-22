@@ -1,16 +1,18 @@
 <template>
-  <div id="clock">
-    <div class="clock-face">
-      <span v-for="n in 60"
-        :key="n"
-        class="clock-tick"
-        :class="{ 'large-tick': !(n % 5) }"
-        :style="{ transform: `rotate(${n * 6}deg)` }">
-      </span>
+  <div class="clock-container">
+    <div id="clock">
+      <div class="clock-face">
+        <span v-for="n in 60"
+          :key="n"
+          class="clock-tick"
+          :class="{ 'large-tick': !(n % 5) }"
+          :style="{ transform: `rotate(${n * 6}deg)` }">
+        </span>
+      </div>
+      <!--<span class="clock-hand second" :style="seconds"></span>-->
+      <span class="clock-hand minute" :style="minutes"></span>
+      <span class="clock-hand hour" :style="hours"></span>
     </div>
-    <span class="clock-hand second" :style="seconds"></span>
-    <span class="clock-hand minute" :style="minutes"></span>
-    <span class="clock-hand hour" :style="hours"></span>
   </div>
 </template>
 
@@ -43,9 +45,9 @@
     methods: {
       updateClock () {
         let curdate = new Date()
-        this.rotation.hours = ( curdate.getHours() + curdate.getMinutes()/60 ) / 12 * 360
+        this.rotation.hours = (curdate.getHours() + curdate.getMinutes() / 60) / 12 * 360
         this.rotation.minutes = curdate.getMinutes() / 60 * 360
-        this.rotation.seconds = ( curdate.getSeconds() + curdate.getMilliseconds()/1000 ) /60 * 360
+        // this.rotation.seconds = (curdate.getSeconds() + curdate.getMilliseconds() / 1000) / 60 * 360
         requestAnimationFrame(this.updateClock)
       }
     },
@@ -62,15 +64,24 @@
   $clock-hand-blue: #7392a0;
   $clock-hand-pink: #edbec5;
 
+  $clock-size: 50%;
+
+  .clock-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
   #clock {
     /*Positioning and Size*/
     /*Should be 75% of its container*/
-    width: 75%;
-    height: 75%;
+    width: $clock-size;
+    height: $clock-size;
     position: relative;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    z-index: 2;
 
     /*Looks*/
     border-radius: 100%;
@@ -163,7 +174,7 @@
       height: 2.5%;
       position: absolute;
       border-radius: 100%;
-      background-color: $clock-hand-pink;
+      background-color: $clock-hand-blue;
       transform: translate3d(-50%, -50%, 0);
     }
   }
