@@ -46,6 +46,7 @@
     border-radius: 10px;
     filter: drop-shadow(0 0 8px rgba(#000, 0.1));
     overflow: hidden;
+    z-index: 2;
   }
 
   .top {
@@ -81,7 +82,10 @@
     }
   }
 
-  .slide-enter-active, .slide-leave-active {
+  .slide-enter-active {
+    transition: all .9s ease-out;
+  }
+  .slide-leave-active {
     transition: all .9s $easeInOutBack;
   }
   .slide-enter, .slide-leave-to {

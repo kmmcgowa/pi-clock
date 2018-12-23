@@ -1,12 +1,13 @@
-import path from 'path'
-import express from 'express'
-import morgan from 'morgan'
-import helmet from 'helmet'
-import cors from 'cors'
-import { IpFilter as ipFilter } from 'express-ipfilter'
-import DateHoliday from 'date-holidays'
-import moment from 'moment'
-import config from '../mirror.config'
+const path = require('path')
+const fs = require('fs')
+const express = require('express')
+const morgan = require('morgan')
+const helmet = require('helmet')
+const cors = require('cors')
+const ipFilter = require('express-ipfilter').IpFilter
+const DateHoliday = require('date-holidays')
+const moment = require('moment')
+const config = require('../mirror.config')
 
 const app = express()
 
@@ -17,8 +18,8 @@ app.use(morgan('combined'))
 app.use(cors())
 
 // ip middleware
-app.use(function (request, response, next) {
-  ipFilter(config.ipWhitelist, { mode: config.ipWhitelist.length === 0 ? 'deny' : 'allow', log: false })(request, response, function (err) {
+app.use((request, response, next) => {
+  ipFilter(config.ipWhitelist, { mode: config.ipWhitelist.length === 0 ? 'deny' : 'allow', log: false })(request, response, (err) => {
     if (err === undefined) {
       return next()
     }
@@ -32,8 +33,11 @@ app.use(function (request, response, next) {
 const staticPath = path.join(__dirname, '../frontend/dist')
 app.use(express.static(staticPath))
 
+const photosPath = path.join(__dirname, '../photos')
+app.use('/photos/', express.static(photosPath))
+
 // holiday checker
-app.get('/holidays', (req, res) => {
+app.get('/holidays', (req, res, next) => {
   let today = new Date()
 
   let now = moment()
@@ -45,7 +49,7 @@ app.get('/holidays', (req, res) => {
   // Are we not forcing a api call
   if (!now.isBetween(startTime, endTime) && !req.query.force) {
     res.json({ 'error': 'Not between time checks.' })
-    return
+    return next()
   }
 
   let isHoliday = holidays.isHoliday(today)
@@ -64,6 +68,37 @@ app.get('/holidays', (req, res) => {
     name: 'Mardi Gras',
     note: 'this is a test note!',
     type: 'public' })
+})
+
+// Pictures
+app.get('/pictures', async (req, res, next) => {
+  try {
+    await fs.readdir(path.join(__dirname, '../photos'), (e, files) => {
+      if (e || files.length < 1) {
+        res.json({
+          'error': 'No Photos to share :(...'
+        })
+        return next()
+      }
+      // filter out files that are not photos, like .DS_Store
+      let photos = files.filter(file => file.match(/(\.jpg|\.png)$/i))
+
+      // turns out there were no photos
+      if (photos.length < 1) {
+        res.json({
+          'error': 'No Photos to share :(...'
+        })
+        return next()
+      }
+
+      res.json(photos)
+    })
+  } catch (e) {
+    console.log(e)
+    res.json({
+      'error': 'Something went wrong...'
+    })
+  }
 })
 
 app.listen(3000, () => console.log('App listening on port 3000!'))

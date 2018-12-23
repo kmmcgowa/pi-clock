@@ -6,18 +6,21 @@
             :holidayInfo="holiday"
             @closeModal="closedModal = true"/>
     </transition>
+    <Photos @photosReady="startAlert"/>
   </div>
 </template>
 
 <script>
   import Clock from './components/Clock.vue'
   import Alert from './components/Alert'
+  import Photos from './components/Photos'
 
   export default {
     name: 'app',
     components: {
       Clock,
-      Alert
+      Alert,
+      Photos
     },
     data () {
       return {
@@ -26,21 +29,24 @@
         closedModal: false
       }
     },
-    mounted () {
-      this.axios.get('http://localhost:3000/holidays?force=true').then((res) => {
-        console.log(res.data)
-        res.data.error
-          ? this.error = res.data.error
-          : this.holiday = res.data
-      }).catch((e) => {
-        this.error = e
-      })
+    methods: {
+      startAlert () {
+        this.axios.get('http://localhost:3000/holidays?force=true').then((res) => {
+          console.log(res.data)
+          res.data.error
+            ? this.error = res.data.error
+            : this.holiday = res.data
+        }).catch((e) => {
+          this.error = e
+        })
+      }
     }
   }
 </script>
 
 <style lang="scss">
   @import './styles/global';
+  $bg: #7392a0;
 
   #app {
     display: grid;
@@ -51,5 +57,6 @@
     position: relative;
     align-items: center;
     justify-items: center;
+    background: $bg;
   }
 </style>
