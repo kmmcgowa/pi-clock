@@ -81,7 +81,10 @@
     }
   }
 
-  .slide-enter-active, .slide-leave-active {
+  .slide-enter-active {
+    transition: all .9s ease-out;
+  }
+  .slide-leave-active {
     transition: all .9s $easeInOutBack;
   }
   .slide-enter, .slide-leave-to {
