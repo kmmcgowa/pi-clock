@@ -46,6 +46,7 @@
     border-radius: 10px;
     filter: drop-shadow(0 0 8px rgba(#000, 0.1));
     overflow: hidden;
+    z-index: 2;
   }
 
   .top {
