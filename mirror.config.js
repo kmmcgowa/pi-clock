@@ -6,6 +6,6 @@ module.exports = {
   electron: {
     devTools: true,
     // will open devtools
-    debug: true
+    debug: process.env.NODE_ENV === 'production'
   }
 }
