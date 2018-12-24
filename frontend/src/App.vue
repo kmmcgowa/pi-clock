@@ -31,7 +31,7 @@
     },
     methods: {
       startAlert () {
-        this.axios.get('http://localhost:3000/holidays?force=true').then((res) => {
+        this.axios.get('http://localhost:3000/holidays').then((res) => {
           console.log(res.data)
           res.data.error
             ? this.error = res.data.error

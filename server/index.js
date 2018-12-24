@@ -11,7 +11,9 @@ const moment = require('moment')
 
 const app = express()
 const server = HttpServer(app)
-const holidays = new DateHoliday('US', 'CA', 'LA')
+// We will be using a custom build of holidays.json
+// It will only include US and UK holidays
+const holidays = new DateHoliday('US')
 
 const staticPath = path.join(__dirname, '../frontend/dist')
 const photosPath = path.join(__dirname, '../photos')
@@ -60,20 +62,20 @@ const Server = function (config) {
 
     let isHoliday = holidays.isHoliday(today)
 
-    // if (isHoliday) {
-    //   res.json(isHoliday)
-    // } else {
-    //   res.json({
-    //     'error': 'No Holidays Today'
-    //   })
-    // }
+    if (isHoliday) {
+      res.json(isHoliday)
+    } else {
+      res.json({
+        'error': 'No Holidays Today'
+      })
+    }
 
-    res.json({ date: '2016-02-09 00:00:00',
-      start: 'Tue Feb 09 2016 00:00:00 GMT-0600 (CST)',
-      end: 'Wed Feb 10 2016 00:00:00 GMT-0600 (CST)',
-      name: 'Mardi Gras',
-      note: 'this is a test note!',
-      type: 'public' })
+    // res.json({ date: '2016-02-09 00:00:00',
+    //   start: 'Tue Feb 09 2016 00:00:00 GMT-0600 (CST)',
+    //   end: 'Wed Feb 10 2016 00:00:00 GMT-0600 (CST)',
+    //   name: 'Mardi Gras',
+    //   note: 'this is a test note!',
+    //   type: 'public' })
   })
 
 // Pictures
@@ -107,7 +109,7 @@ const Server = function (config) {
     }
   })
 
-  server.listen(config.serverPort || 3000, () => console.log('App listening on port 3000!'))
+  server.listen(config.serverPort || 3000, () => console.log(`App listening on port ${config.serverPort || 3000}!`))
 }
 
 module.exports = Server
